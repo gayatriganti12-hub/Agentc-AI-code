@@ -1,0 +1,56 @@
+### created this agent using google colab
+
+### link to google colab  https://colab.research.google.com/
+
+#### link to generate API key https://aistudio.google.com/
+
+###########################################################################################
+
+
+
+### simple basic chatbot
+
+### google LLM package....generativai or genai
+
+### import package
+
+import google.generativeai as genai
+from google.colab import userdata
+
+
+### access api key for google llm secret
+
+genai.configure(api_key=userdata.get('GOOGLE_API_KEY'))
+
+
+### list available models
+
+#print("available models")
+
+#for m in genai.list_models():
+#  if "generateContent" in m.supported_generation_methods:
+#    print(m.name)
+
+model = genai.GenerativeModel("gemini-2.5-flash")
+
+### create simple function for this chatbot
+
+def simple_agent(prompt):
+  response = model.generate_content(prompt)
+  return response.text
+
+
+### define user input
+
+question = input("Enter your question.....")
+
+answer = simple_agent(question)
+
+
+### print the response
+
+print("Ques:", question)
+print("Ans:", answer)
+
+
+###
