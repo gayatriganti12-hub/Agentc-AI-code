@@ -1,0 +1,123 @@
+  ##Medical Multi Agent AI
+
+  ## install package
+  !pip install -q google-generativeai
+
+
+  #### import libraries
+
+  import google.generativeai as genai
+  from datetime import datetime
+  from google.colab import userdata
+  import os
+
+
+  ### configure API key
+
+
+  GeminiApi = userdata.get('GeminiApi')
+  genai.configure(api_key=userdata.get("GeminiApi"))
+
+  #load LLM 
+
+  model = genai.GenerativeModel(
+      model_name= "gemini-flash-latest", 
+      generation_config={"temperature": 0.3}
+  )
+
+  ###### creating agent
+
+  #Agent 1 
+  #Patient Interaction agent
+
+  def Patient_agent(user_input):
+    print("\n[Risk Analysis Agent]")
+
+    prompt = f"""
+  I am the patient
+
+  -Analyse the symptoms
+  -Ask follow up questions
+  -check previous history
+
+  Customer input:
+    {user_input}
+
+  """
+
+    response = model.generate_content(prompt)
+    print(response.text)
+    return response.text
+
+  #Agent 2 diagnoasis agent
+
+  def Diagnosis_agent(diagnosis_input):
+    print("\n[Diagnosis Agent]")
+
+    prompt = f"""
+    I am the Diagnosis Agent
+
+    --Analyse the symptoms and Suggest possible diseses
+    --Analysis of reports 
+
+  diagnosis input:
+  {diagnosis_input}
+
+  """
+
+    response = model.generate_content(prompt)
+    print(response.text)
+    return response.text
+
+  #Report Agent
+
+  def Report_agent(report_input):
+          print("\n[Report Agent]")
+
+          prompt = f"""
+          I am the Report Agent
+
+          --Analyse the symptoms and Suggest possible diseses
+          --Analysis of reports 
+
+          Report input:
+            {report_input}
+
+            """
+
+          response = model.generate_content(prompt)
+          print(response.text)
+          return response.text
+
+  #Doctor agent
+
+  def Doctor_agent(doctor_output):
+  print("\n[Doctor Agent]")
+
+  prompt = f"""
+  I am the Doctor Agent
+
+  --Doctor reviews the reports
+
+  doctor output:
+    {doctor_output}
+
+    """
+
+  response = model.generate_content(prompt)
+  print(response.text)
+  return response.text
+
+  user_input = input("Enter your symptoms: ")
+
+  patient_output = Patient_agent(user_input)
+
+  diagnosis_output = Diagnosis_agent(patient_output)
+
+  report_output = Report_agent(diagnosis_output)
+
+  doctor_output = Doctor_agent(report_output)
+
+  print("\n================ FINAL OUTPUT ================\n")
+
+  print(doctor_output)
